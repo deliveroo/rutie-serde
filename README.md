@@ -4,6 +4,9 @@ Create a new rust crate and make sure to specify crate-type to be "dylib".
 Also add `rutie`, `rutie-serde`, `serde` and possibly `serde_derive` as a dependency.
 
 ```toml
+[package]
+edition = "2018"
+
 [lib]
 crate-type = ["dylib"]
 name = "ruby_rust_demo"
@@ -21,11 +24,9 @@ This macro takes care of deserializing arguments and serializing return values.
 It also captures all panics inside those methods and raises them as an exception in ruby.
 
 ```rust
-#[macro_use] extern crate rutie_serde;
-#[macro_use] extern crate rutie;
-#[macro_use] extern crate serde_derive;
-
-use rutie::{Class, Object};
+use rutie::{Class, Object, class};
+use rutie_serde::rutie_serde_methods;
+use serde_derive::{Serialize, Deserialize};
 
 #[derive(Debug, Deserialize)]
 pub struct User {

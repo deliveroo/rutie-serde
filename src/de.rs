@@ -1,5 +1,6 @@
 use rutie::{AnyObject, Array, Boolean, Class, Fixnum, Float, NilClass, Object, RString};
 use serde::de::{self, Deserialize, DeserializeSeed, MapAccess, Visitor};
+use log::debug;
 
 use crate::{Error, ErrorKind, Result, ResultExt};
 
@@ -22,6 +23,7 @@ fn object_class_name(object: &AnyObject) -> Result<String> {
     Ok(class_name)
 }
 
+#[doc(hidden)]
 macro_rules! try_convert_to {
     ($object:expr, $type:ty) => {{
         let object = &$object;

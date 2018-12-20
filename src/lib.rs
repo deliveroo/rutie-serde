@@ -1,8 +1,3 @@
-#[macro_use]
-extern crate log;
-extern crate rutie;
-extern crate serde;
-extern crate serde_json;
 // Must be defined first because of macro scoping rules.
 #[macro_use]
 mod macros;
