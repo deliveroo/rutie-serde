@@ -3,9 +3,15 @@ name = "rutie-serde"
 version = "0.1.0"
 authors = ["Logistics Team <logistics-team@deliveroo.co.uk>"]
 edition = "2018"
+description = "rutie serde integration"
+repository = "https://github.com/deliveroo/rutie-serde"
+readme = "README.md"
+keywords = ["rutie", "serde", "ruru", "ruby"]
+categories = ["external-ffi-bindings"]
+license = "MIT"
 
 [dependencies]
-rutie = "0.5.2"
+rutie = "^0.5.2"
 serde = "1.0"
 serde_json = "1.0"
-log = "*"
+log = "^0.4"
