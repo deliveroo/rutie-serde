@@ -1,4 +1,4 @@
-use rutie::{self, AnyObject, Object};
+use rutie::{self, AnyObject, Object, Encoding};
 use serde::ser::{self, Serialize};
 
 use crate::{Error, Result};
@@ -107,7 +107,7 @@ impl<'a> ser::Serializer for &'a mut Serializer {
     // string here. Binary formats will typically represent byte arrays more
     // compactly.
     fn serialize_bytes(self, v: &[u8]) -> Result<AnyObject> {
-        self.serialize_str(unsafe { ::std::str::from_utf8_unchecked(v) })
+        Ok(rutie::RString::from_bytes(v, &Encoding::default_external()).to_any_object())
     }
 
     // An absent optional is represented as the JSON `null`.
