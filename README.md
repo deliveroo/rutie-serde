@@ -12,8 +12,8 @@ crate-type = ["dylib"]
 name = "ruby_rust_demo"
 
 [dependencies]
-rutie = "0.5.2"
-rutie-serde = { path = "/Users/andriidmytrenko/dev/rust/rutie-serde" }
+rutie = "^0.5.2"
+rutie-serde = "^0.1.0"
 serde = "1.0"
 serde_derive = "1.0"
 ```

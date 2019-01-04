@@ -1,7 +1,7 @@
 [package]
 name = "rutie-serde"
 version = "0.1.0"
-authors = ["Logistics Team <logistics-team@deliveroo.co.uk>"]
+authors = ["Andrii Dmytrenko <andrii.dmytrenko@deliveroo.co.uk>"]
 edition = "2018"
 description = "rutie serde integration"
 repository = "https://github.com/deliveroo/rutie-serde"
