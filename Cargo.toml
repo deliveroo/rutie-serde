@@ -1,6 +1,6 @@
 [package]
 name = "rutie-serde"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Andrii Dmytrenko <andrii.dmytrenko@deliveroo.co.uk>"]
 edition = "2018"
 description = "rutie serde integration"
