@@ -26,7 +26,7 @@ where
                 None => "Unknown error".to_owned(),
             });
             let instance =
-                exception_class.new_instance(Some(&[RString::new_utf8(&msg).to_any_object()]));
+                exception_class.new_instance(&[RString::new_utf8(&msg).to_any_object()]);
             let exception = rutie::AnyException::from(instance.value());
             VM::raise_ex(exception);
             unreachable!("VM::raise_ex");

@@ -11,7 +11,7 @@ categories = ["external-ffi-bindings"]
 license = "MIT"
 
 [dependencies]
-rutie = "^0.5.2"
+rutie = "0.7"
 serde = "1.0"
 serde_json = "1.0"
 log = "^0.4"
