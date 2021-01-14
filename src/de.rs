@@ -16,8 +16,8 @@ where
 
 fn object_class_name(object: &AnyObject) -> Result<String> {
     let class_name = object
-        .protect_public_send("class", None)?
-        .protect_public_send("name", None)?
+        .protect_public_send("class", &[])?
+        .protect_public_send("name", &[])?
         .try_convert_to::<RString>()?
         .to_string();
     Ok(class_name)
@@ -56,7 +56,7 @@ impl Deserializer {
         }
     }
 
-    fn protect_send(&self, method: &str, arguments: Option<&[AnyObject]>) -> Result<AnyObject> {
+    fn protect_send(&self, method: &str, arguments: &[AnyObject]) -> Result<AnyObject> {
         Ok(self.object.protect_send(method, arguments)?)
     }
 
@@ -228,7 +228,7 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
         debug!("deserialize_string: {:?}", self.object);
         let s = self
             .object
-            .protect_send("to_s", None)?
+            .protect_send("to_s", &[])?
             .try_convert_to::<RString>()?
             .to_string();
         debug!("deserialize_string: {}", s);
@@ -346,7 +346,7 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
             .object
             .protect_send(
                 "is_a?",
-                Some(&[Class::from_existing("Hash").to_any_object()]),
+                &[Class::from_existing("Hash").to_any_object()],
             )?
             .try_convert_to::<Boolean>()?
             .to_bool()
@@ -437,7 +437,7 @@ impl<'de, 'a> MapAccess<'de> for ObjectAccess<'a> {
         let identifier = self.fields[self.pos];
         let field_object = self
             .de
-            .protect_send(identifier, None)
+            .protect_send(identifier, &[])
             .chain_context(|| format!("While deserializing {:?}", identifier))?;
         debug!(
             "next_value_seed: field: {} ({:?})",
@@ -459,7 +459,7 @@ struct SeqAccess {
 impl SeqAccess {
     fn new(arr: AnyObject) -> Result<Self> {
         let len = arr
-            .protect_send("length", None)?
+            .protect_send("length", &[])?
             .try_convert_to::<Fixnum>()?
             .to_i64() as usize;
         Ok(Self { arr, len, pos: 0 })
@@ -479,7 +479,7 @@ impl<'de> de::SeqAccess<'de> for SeqAccess {
         }
         let element = self
             .arr
-            .protect_send("[]", Some(&[Fixnum::new(self.pos as i64).to_any_object()]))?;
+            .protect_send("[]", &[Fixnum::new(self.pos as i64).to_any_object()])?;
         self.pos += 1;
         seed.deserialize(Deserializer::new(&element)).map(Some)
     }
@@ -501,7 +501,7 @@ impl<'a> HashAccess<'a> {
     fn new(de: &'a mut Deserializer) -> Result<Self> {
         let keys = de
             .object
-            .protect_send("keys", None)?
+            .protect_send("keys", &[])?
             .try_convert_to::<Array>()?;
         let len = keys.length();
         Ok(Self {
@@ -537,7 +537,7 @@ impl<'de, 'a> MapAccess<'de> for HashAccess<'a> {
     {
         let field_object = self
             .de
-            .protect_send("fetch", Some(&[self.current_key.clone()]))
+            .protect_send("fetch", &[self.current_key.clone()])
             .chain_context(|| format!("While deserializing {:?}", self.current_key.clone()))?;
         debug!("next_value_seed: field ({:?})", field_object);
         self.pos += 1;
@@ -577,14 +577,14 @@ impl<'de> de::EnumAccess<'de> for EnumAccess {
                 debug!("deserialize_enum: assuming externally tagged hash enum");
                 let variant_name_object = self
                     .object
-                    .protect_send("keys", None)?
-                    .protect_send("first", None)?
-                    .protect_send("to_s", None)?;
+                    .protect_send("keys", &[])?
+                    .protect_send("first", &[])?
+                    .protect_send("to_s", &[])?;
                 let variant_name = try_convert_to!(variant_name_object, RString)?.to_string();
                 let variant_content = self
                     .object
-                    .protect_send("values", None)?
-                    .protect_send("first", None)?;
+                    .protect_send("values", &[])?
+                    .protect_send("first", &[])?;
                 (variant_name, variant_content)
             }
             // "variant_name" unit variant
@@ -592,7 +592,7 @@ impl<'de> de::EnumAccess<'de> for EnumAccess {
                 debug!("deserialize_enum: assuming string like enum");
                 (
                     self.object
-                        .protect_send("to_s", None)?
+                        .protect_send("to_s", &[])?
                         .try_convert_to::<RString>()?
                         .to_string(),
                     self.object,

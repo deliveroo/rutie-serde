@@ -15,7 +15,7 @@ impl fmt::Display for ErrorKind {
         match *self {
             Message(ref msg) => write!(f, "{}", msg),
             RutieException(ref exception) => {
-                let inspect = exception.protect_send("inspect", None);
+                let inspect = exception.protect_send("inspect", &[]);
                 let msg = match inspect {
                     Ok(inspect) => inspect
                         .try_convert_to::<rutie::RString>()
@@ -150,7 +150,7 @@ impl IntoException for Error {
             _ => {
                 let msg = format!("{}", self);
                 let obj = default_class
-                    .new_instance(Some(&[rutie::RString::new_utf8(&msg).to_any_object()]));
+                    .new_instance(&[rutie::RString::new_utf8(&msg).to_any_object()]);
                 rutie::AnyException::from(obj.value())
             }
         }

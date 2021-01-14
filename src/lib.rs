@@ -82,7 +82,7 @@ pub mod anyobject_serde {
         let object_id = usize::deserialize(deserializer)?;
         let object = Class::from_existing("ObjectSpace").protect_public_send(
             "_id2ref",
-            Some(&[Fixnum::new(object_id as i64).to_any_object()]),
+            &[Fixnum::new(object_id as i64).to_any_object()],
         );
         object.map_err(|_e| D::Error::missing_field("_id2ref raised an error"))
     }
