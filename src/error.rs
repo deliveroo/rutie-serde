@@ -1,7 +1,6 @@
 use std::fmt;
 
 use rutie::{self, Exception, Object};
-use serde;
 
 pub enum ErrorKind {
     Message(String),

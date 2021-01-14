@@ -369,7 +369,7 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
             "deserialize_enum name: {:?}, variants: {:?}",
             name, variants
         );
-        visitor.visit_enum(EnumAccess::new(self.object.clone()))
+        visitor.visit_enum(EnumAccess::new(self.object))
     }
 
     fn deserialize_identifier<V>(self, visitor: V) -> Result<V::Value>
