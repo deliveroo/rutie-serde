@@ -149,8 +149,8 @@ impl IntoException for Error {
             }
             _ => {
                 let msg = format!("{}", self);
-                let obj = default_class
-                    .new_instance(&[rutie::RString::new_utf8(&msg).to_any_object()]);
+                let obj =
+                    default_class.new_instance(&[rutie::RString::new_utf8(&msg).to_any_object()]);
                 rutie::AnyException::from(obj.value())
             }
         }
