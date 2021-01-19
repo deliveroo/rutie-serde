@@ -1,6 +1,6 @@
+use log::debug;
 use rutie::{AnyObject, Array, Boolean, Class, Fixnum, Float, NilClass, Object, RString};
 use serde::de::{self, Deserialize, DeserializeSeed, MapAccess, Visitor};
-use log::debug;
 
 use crate::{Error, ErrorKind, Result, ResultExt};
 
@@ -344,10 +344,7 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
         debug!("deserialize_struct: {}, fields: {:?}", name, fields);
         if self
             .object
-            .protect_send(
-                "is_a?",
-                &[Class::from_existing("Hash").to_any_object()],
-            )?
+            .protect_send("is_a?", &[Class::from_existing("Hash").to_any_object()])?
             .try_convert_to::<Boolean>()?
             .to_bool()
         {
@@ -372,7 +369,7 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
             "deserialize_enum name: {:?}, variants: {:?}",
             name, variants
         );
-        visitor.visit_enum(EnumAccess::new(self.object.clone()))
+        visitor.visit_enum(EnumAccess::new(self.object))
     }
 
     fn deserialize_identifier<V>(self, visitor: V) -> Result<V::Value>

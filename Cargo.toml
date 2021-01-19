@@ -1,6 +1,6 @@
 [package]
 name = "rutie-serde"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Andrii Dmytrenko <andrii.dmytrenko@deliveroo.co.uk>"]
 edition = "2018"
 description = "rutie serde integration"
@@ -11,7 +11,6 @@ categories = ["external-ffi-bindings"]
 license = "MIT"
 
 [dependencies]
-rutie = "0.7"
-serde = "1.0"
-serde_json = "1.0"
-log = "^0.4"
+log = "0.4.13"
+rutie = "0.8.1"
+serde = "1.0.119"

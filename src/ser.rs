@@ -1,4 +1,4 @@
-use rutie::{self, AnyObject, Object, Encoding};
+use rutie::{self, AnyObject, Encoding, Object};
 use serde::ser::{self, Serialize};
 
 use crate::{Error, Result};
