@@ -1,3 +1,5 @@
+use std::str;
+
 use log::debug;
 use rutie::{AnyObject, Array, Boolean, Class, Fixnum, Float, NilClass, Object, RString};
 use serde::de::{self, Deserialize, DeserializeSeed, MapAccess, Visitor};
@@ -218,7 +220,16 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
         V: Visitor<'de>,
     {
         debug!("deserialize_str: {:?}", self.object);
-        self.deserialize_string(visitor)
+        let s = self
+            .object
+            .protect_send("to_s", &[])?
+            .try_convert_to::<RString>()?;
+        let b = s.to_bytes_unchecked();
+        if let Ok(s) = str::from_utf8(b) {
+            visitor.visit_str(s)
+        } else {
+            visitor.visit_bytes(b)
+        }
     }
 
     fn deserialize_string<V>(self, visitor: V) -> Result<V::Value>
@@ -229,10 +240,13 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
         let s = self
             .object
             .protect_send("to_s", &[])?
-            .try_convert_to::<RString>()?
-            .to_string();
-        debug!("deserialize_string: {}", s);
-        visitor.visit_string(s)
+            .try_convert_to::<RString>()?;
+        let b = s.to_vec_u8_unchecked();
+        if str::from_utf8(&b).is_ok() {
+            visitor.visit_string(unsafe { String::from_utf8_unchecked(b) }) // SAFETY: we just checked that `b` is valid UTF-8
+        } else {
+            visitor.visit_byte_buf(b)
+        }
     }
 
     fn deserialize_bytes<V>(self, visitor: V) -> Result<V::Value>
