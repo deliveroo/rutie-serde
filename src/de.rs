@@ -100,7 +100,7 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
             "Float" => self.deserialize_f64(visitor),
             "Hash" => self.deserialize_map(visitor),
             "NilClass" => visitor.visit_none(),
-            "String" => self.deserialize_string(visitor),
+            "String" | "Symbol" => self.deserialize_string(visitor),
             "TrueClass" | "FalseClass" => self.deserialize_bool(visitor),
             _ => Err(format!("No rules to deserialize {}", class_name).into()),
         }
