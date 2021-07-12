@@ -240,8 +240,8 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
         V: Visitor<'de>,
     {
         debug!("deserialize_bytes: {:?}", self.object);
-        let s = try_convert_to!(self.object, RString)?.to_string_unchecked();
-        visitor.visit_bytes(&s.into_bytes())
+        let s = try_convert_to!(self.object, RString)?;
+        visitor.visit_bytes(s.to_bytes_unchecked())
     }
 
     fn deserialize_byte_buf<V>(self, visitor: V) -> Result<V::Value>
@@ -249,8 +249,8 @@ impl<'de, 'a> de::Deserializer<'de> for Deserializer {
         V: Visitor<'de>,
     {
         debug!("deserialize_byte_buf: {:?}", self.object);
-        let s = try_convert_to!(self.object, RString)?.to_string_unchecked();
-        visitor.visit_byte_buf(s.into_bytes())
+        let s = try_convert_to!(self.object, RString)?;
+        visitor.visit_byte_buf(s.to_vec_u8_unchecked())
     }
 
     fn deserialize_option<V>(self, visitor: V) -> Result<V::Value>
